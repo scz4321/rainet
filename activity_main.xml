@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<TextView
+    android:id="@+id/txtMain"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:text="作为主机"
+    android:textColor="#000" />
+
+<Button
+    android:id="@+id/serverBtn"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="start server" />
+
+<TextView
+    android:id="@+id/txtClient"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:text="作为客户端"
+    android:textColor="#000" />
+
+<EditText
+    android:id="@+id/ipText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="ip"
+    android:text="192.168.31.163" />
+
+<Button
+    android:id="@+id/clientBtn"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="client connection" />
+
+</LinearLayout>
