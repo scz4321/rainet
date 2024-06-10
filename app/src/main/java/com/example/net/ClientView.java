@@ -417,24 +417,25 @@ public class ClientView extends View {
         // 前8个棋的 y 坐标
         int[] mapY = {0, 0, 0, 1, 1, 0, 0, 0};
         // 前8个棋的棋名
-        String[] strings = {"none", "none", "none", "none", "none", "none", "none", "none"};
+        String[] strings = {"none", "none", "none", "none", "none", "none", "none", "none",
+                   "none", "none", "none", "none", "none", "none", "none", "none"};
         // 临时存储行和列
         int row, col;
         for (int i = 0; i < allChess.length; i++) {
             // 小于8为红旗
             if (i < 8) {
-                row = mapY[i];
-                col = mapX[i];
+                row = mapY[i+8];
+                col = mapX[i+8];
                 // 初始化棋子
-                allChess[i] = new Chess(BLACK, strings[i], i);
+                allChess[i] = new Chess(RED, strings[i], i);
                 // 给相应的棋盘位置安排编号
-                map[row][col] = i;
+                map[row][col] = i+8;
                 // 设置棋子在棋盘中的初始位置
                 allChess[i].setPos(row, col);
             } else {
-                row = ROW - mapY[i - 8] - 1;
-                col = COL - mapX[i - 8] - 1;
-                allChess[i] = new Chess(RED, strings[i - 8], i);
+                row = ROW - mapY[i] - 1;
+                col = COL - mapX[i] - 1;
+                allChess[i] = new Chess(BLACK, strings[i], i);
                 map[row][col] = i;
                 allChess[i].setPos(row, col);
             }

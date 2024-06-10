@@ -425,7 +425,8 @@ public class ServerView extends View {
         // 前8个棋的 y 坐标
         int[] mapY = {0, 0, 0, 1, 1, 0, 0, 0};
         // 前8个棋的棋名
-        String[] strings = {"none", "none", "none", "none", "none", "none", "none", "none"};
+        String[] strings = {"none", "none", "none", "none", "none", "none", "none", "none",
+                    "none", "none", "none", "none", "none", "none", "none", "none"};
         // 临时存储行和列
         int row, col;
         for (int i = 0; i < allChess.length; i++) {
