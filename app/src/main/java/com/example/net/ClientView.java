@@ -120,31 +120,26 @@ public class ClientView extends View {
         setOnTouchListener(new OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                // 若当前不可以点击则不执行点击事件
-                if (!canPlay) {
-
-                    return false;
-                }
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         isMove = false;
                         break;
-                    case MotionEvent.ACTION_MOVE:
-                        // 若有滑动事件则会执行
-                        isMove = true;
-                        break;
                     case MotionEvent.ACTION_UP:
+                        // 若当前不可以点击则不执行点击事件
+                        if (!canPlay) {
+                            return false;
+                        }
                         if (!isMove) {
                             // 获取点击的 x 坐标
                             int x = ((int) event.getX() - MARGINLEFT);
                             // 获取点击的 y 坐标
-                            int y = ((int) event.getY() - MARGINTOP - MARGINLEFT);
+                            int y = ((int) event.getY() - MARGINTOP - MARGINLEFT - 100);
                             // 转化为棋盘的 col 列坐标
                             // x % W > W / 2 ? 1 : 0 为当前的位置的求模后是否满足大于一半的宽度，
                             // 若大于则把它安排到下一个位置，否则不变
-                            x = x / W + (x % W > W / 2 ? 1 : 0);
+                            x = x / W ;
                             // 转化为棋盘的 row 行坐标
-                            y = y / W + (y % W > W / 2 ? 1 : 0);
+                            y = y / W ;
                             // 若超出棋盘边界则不执行
                             if (x < 0 || x >= COL || y < 0 || y >= ROW) {
                                 break;
@@ -271,8 +266,6 @@ public class ClientView extends View {
                         // 只有客户端才会接收到
                         case "conn":
                             player = RED;
-                            // 要翻转棋盘
-                            reverseMap();
                             updateOnUI();
                             canPlay = false;
                             setTip("我是红棋，对方下");
@@ -290,11 +283,11 @@ public class ClientView extends View {
                                 continue;
                             }
                             // 对方走的棋编号
-                            int originalPos = Integer.valueOf(array[1]);
+                            int originalPos = Integer.valueOf(array[1])-8;
                             // 要走的行坐标
                             int y2 = ROW - Integer.valueOf(array[2]) - 1;
                             // 要走的列坐标
-                            int x2 = Integer.valueOf(array[3]);
+                            int x2 = COL - Integer.valueOf(array[3]) - 1;
                             // 我方当前的对方要走的棋行列坐标
                             int y1 = allChess[originalPos].getPosX();
                             int x1 = allChess[originalPos].getPosY();
@@ -418,24 +411,24 @@ public class ClientView extends View {
         int[] mapY = {0, 0, 0, 1, 1, 0, 0, 0};
         // 前8个棋的棋名
         String[] strings = {"none", "none", "none", "none", "none", "none", "none", "none",
-                   "none", "none", "none", "none", "none", "none", "none", "none"};
+                    "none", "none", "none", "none", "none", "none", "none", "none"};
         // 临时存储行和列
         int row, col;
         for (int i = 0; i < allChess.length; i++) {
             // 小于8为红旗
             if (i < 8) {
-                row = mapY[i+8];
-                col = mapX[i+8];
+                row = mapY[i];
+                col = mapX[i];
                 // 初始化棋子
-                allChess[i] = new Chess(RED, strings[i], i);
+                allChess[i] = new Chess(BLACK, strings[i], i);
                 // 给相应的棋盘位置安排编号
-                map[row][col] = i+8;
+                map[row][col] = i;
                 // 设置棋子在棋盘中的初始位置
                 allChess[i].setPos(row, col);
             } else {
-                row = ROW - mapY[i] - 1;
-                col = COL - mapX[i] - 1;
-                allChess[i] = new Chess(BLACK, strings[i], i);
+                row = ROW - mapY[i - 8] - 1;
+                col = COL - mapX[i - 8] - 1;
+                allChess[i] = new Chess(RED, strings[i - 8], i);
                 map[row][col] = i;
                 allChess[i].setPos(row, col);
             }
@@ -456,24 +449,7 @@ public class ClientView extends View {
 //            Log.d(TAG, "showChess: " + allChess[i].getName() + "-" + allChess[i].getNum() + "-" + allChess[i].getPosX() + "-" + allChess[i].getPosY());
 //        }
 //    }
-    // 翻转棋盘
-    private void reverseMap() {
-        int t;
-        // 默认为黑下红上
-        // 主机为黑下红上
-        // 客户端为黑上红下，所以是客户端时将双方棋的位置换一下
-        for (int i = 0; i < ROW / 2; i++) {
-            for (int j = 0; j < COL; j++) {
-                t = map[i][j];
-                map[i][j] = map[ROW - i - 1][j];
-                map[ROW - i - 1][j] = t;
-            }
-        }
-        for (Chess c : allChess) {
-            c.reverse();
-        }
-//        showChess();
-    }
+
 
     // 每次调用 updateOnUI 就会执行这个方法
     @Override
